@@ -1,5 +1,7 @@
 const userIDDOM = document.querySelector('.user-edit-id')
 const userNameDOM = document.querySelector('.user-edit-name')
+const userScoresDOM = document.querySelector('.user-edit-scores')
+
 const taskCompletedDOM = document.querySelector('.user-edit-completed')
 const editFormDOM = document.querySelector('.single-user-form')
 const editBtnDOM = document.querySelector('.user-edit-btn')
@@ -13,10 +15,11 @@ const showUser = async () => {
     const {
       data: { user },
     } = await axios.get(`/api/user/${id}`)
-    const { _id: userID, missioncompleted, name } = user
+    const { _id: userID, missioncompleted, name , scores} = user
 
     userIDDOM.textContent = userID
     userNameDOM.value = name
+    userScoresDOM.value = scores
     tempName = name
     if (missioncompleted) {
       taskCompletedDOM.checked = true
@@ -34,12 +37,14 @@ editFormDOM.addEventListener('submit', async (e) => {
   try {
     const userName = userNameDOM.value
     const missionCompleted = taskCompletedDOM.checked
+    const userScores = userScoresDOM.value
 
     const {
       data: { user },
     } = await axios.patch(`/api/user/${id}`, {
       name: userName,
       missioncompleted: missionCompleted,
+      scores: userScores,
     })
 
     console.log('zzzz client update ueser', user)

@@ -7,7 +7,7 @@ const UserSchema = new mongoose.Schema({
     trim: true,
     maxlength: [20, 'name can not be more than 20 characters'],
   },
-  score: {
+  scores: {
     type: Number,
     default: 0,
   },
