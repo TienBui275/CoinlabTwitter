@@ -5,6 +5,8 @@ require('dotenv').config();
 const connectDB = require('./db/connect');
 const user = require('./routes/user-route');
 const twitter = require('./routes/twitter-route')
+const path = require('path')
+
 
 //twitter activity
 const bodyParser = require('body-parser')
@@ -24,7 +26,9 @@ app.use(express.urlencoded({ extended: false }));
 app.use(morgan('dev'));
 
 // view
-app.use(express.static('./public'));
+//app.use(express.static('./public'));
+app.use(express.static(path.join(__dirname, '../frontend/build')))
+
 app.get('/', async (req, res, next) => {
   res.send({ message: 'Awesome it works 🐻' });
 });
