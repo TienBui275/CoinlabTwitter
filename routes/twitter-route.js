@@ -23,7 +23,10 @@ const getUserTimelineExcluded = async (req, res, next) => {
   console.log('z next', next)
   const userID = await roClient.v2.userByUsername(username);
 
-  const tweetsOfUser = await roClient.v2.userTimeline(userID.data.id, { exclude: 'replies', since_id:'222357940751966209' , expansions:'author_id,referenced_tweets.id'});
+  //Date(year, month, day, hours, minutes, seconds, milliseconds) month:0-11
+  const d = new Date(2021, 11, 1, 10, 00, 00, 0);
+
+  const tweetsOfUser = await roClient.v2.userTimeline(userID.data.id, { exclude: 'replies', start_time:d.toISOString() , expansions:'author_id,referenced_tweets.id'});
 
   res.status(200).send({ tweetsOfUser })
 }
@@ -36,7 +39,10 @@ async function countAllTweetKOL() {
   for (let i = 0; i < kols.length; i++) {
     const user = await roClient.v2.userByUsername(kols[i]);
     console.log('z countAllTweetKOL user.data.id', user.data.id)
-    const tweetsOfUser = await roClient.v2.userTimeline(user.data.id, { exclude:'retweets,replies', expansions:'author_id', since_id:'1466595106233139200'});
+
+    const startDate = new Date(2021, 11, 1, 10, 00, 00, 0);
+
+    const tweetsOfUser = await roClient.v2.userTimeline(user.data.id, { exclude:'retweets,replies', expansions:'author_id', start_time:startDate.toISOString() });
 
     for await (const tweet of tweetsOfUser) {
       //console.log('z tweet.author_id', tweet.author_id)
@@ -75,7 +81,7 @@ async function countTweetShiller(userName) {
   console.log('z countTweetShiller: ' , ret_count)
 }
 
-countTweetShiller(shiller[0])
+//countTweetShiller(shiller[0])
 
 
 router.get('/countretweet', async (req, res, next) => {
